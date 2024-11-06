@@ -40,3 +40,13 @@ int main() {
 
     return 0;
 }
+
+// Ici on a une situation d'interblocage car le thread principal attend la fin des threads fils qui attendent la mise à jour d'un flag de la part du thread principal qui ne peut arriver
+// Exclusion mutuelle : Les threads fils et principal se partagent la ressource flag (lignes 14 et 22).
+// Détention et attente : Les threads fils attendent la mise à jour du flag par le thread principal (ligne 13) et se détiennent eux-mêmes.
+// Détenion et attente : Le thread principal attend la fin des threads fils (ligne 38) et détient le flag.
+// Non-réquisition : Seul le thread principal peut mettre à jour le flag.
+// Non-réquisition : Seuls les threads fils peuvent se terminer.
+// Attente circulaire : Les threads fils attendent la mise à jour du flag par le thread principal qui attend la fin des threads fils (lignes 13 et 38).
+
+// On a donc une situation d'interblocage.

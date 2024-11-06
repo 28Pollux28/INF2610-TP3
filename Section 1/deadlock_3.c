@@ -99,3 +99,14 @@ int main() {
 
     return 0;
 }
+
+// Ici on a un blocage entre les threads si un thread obtient 17 dans la variable key (à la ligne 41).
+// Les threads attendent tous la libération de la ressource mutex (ligne 16) pour continuer leur exécution qui est libéré à la fin d'un thread à la ligne 84.
+// Seulement si un thread obtient 17 dans la variable key, il va entrer dans une boucle infinie (ligne 71) et ne libérera jamais la ressource mutex.
+// Les autres threads vont donc attendre indéfiniment la libération de la ressource mutex par le thread bloqué.
+// Pour l'exclusion mutuelle, le sémaphore mutex est utilisé (lignes 16 et 84).
+// Ici nous avons une seule ressource à considérer : le sémaphore mutex.
+// Pour la détention et attente, un thread détient le mutex et les autres threads attendent la libération de la ressource (ligne 16).
+// Pour la non-réquisition, seul le thread qui détient le mutext peut le libérer. (ligne 84)
+// Attente circulaire : pas d'attente circulaire ici.
+// On ne peut donc pas parler d'interblocage ici, mais d'un blocage simple.

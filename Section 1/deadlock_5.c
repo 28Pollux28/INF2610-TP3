@@ -43,3 +43,10 @@ int main() {
 
     return 0;
 }
+
+
+// Ici le programme est dans une situation d'interblocage car les threads attendent un mutex sem_critical qui est détenu par un autre thread qui s'est terminé sans le libérer.
+// Exclusion mutuelle : Le mutex sem_critical assure l'exclusion mutuelle entre les threads (lignes 24 et 28).
+// Détention et attente : Un thread détient le mutex sem_critical et les autres attendent un verrou qui n'est pas disponible (lignes 24 et 28).
+// Non-réquisition : Seul le thread qui détient le mutex sem_critical peut le libérer (lignes 24 et 28).
+// Attente circulaire : Les threads attendent tous le mutex sem_critical détenu par un autre thread qui s'est terminé sans le libérer (lignes 24 et 28).

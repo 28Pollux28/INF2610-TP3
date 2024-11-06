@@ -48,3 +48,10 @@ int main() {
 
     return 0;
 }
+
+// Le programme est dans une situation d'interblocage causée par les threads qui attendent des verrous détenus par des threads voisins.
+// Exclusion mutuelle : Les ressources disponibles sont les verrous (locks) et les threads demandent et détiennent les verrous (lignes 19 et 21).
+// Détention et attente : Les threads détiennent le verrou de gauche et demandent le verrou de droite (lignes 19 et 21).
+// Non-réquisition : Seuls les threads qui possèdent un verrou peuvent le libérer (lignes 25 et 26).
+// Attente circulaire : Les threads détiennent tous leur verrou de gauche et attendent le verrou de droite détenu par leur voisin (lignes 19 et 21).
+// Il y a donc une situation d'interblocage.
