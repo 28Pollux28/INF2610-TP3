@@ -109,4 +109,4 @@ int main() {
 // Pour la détention et attente, un thread détient le mutex et les autres threads attendent la libération de la ressource (ligne 16).
 // Pour la non-réquisition, seul le thread qui détient le mutext peut le libérer. (ligne 84)
 // Attente circulaire : pas d'attente circulaire ici.
-// On ne peut donc pas parler d'interblocage ici, mais d'un blocage simple.
+// On ne peut donc pas parler d'interblocage ici, mais d'un blocage simple, donc d'après l'énoncé, il ne faut pas le corriger.

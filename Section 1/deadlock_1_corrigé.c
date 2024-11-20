@@ -76,8 +76,12 @@ int main() {
     }
 
     for(int i = 0; i < N_THREADS_2; i++){
+        sem_wait(&sem_initial); //Attendre une place dans le buffer
+        sem_wait(&sem_critical); //Accès exclusif au buffer
         buffer[ip] = 0;
         ip = (ip + 1) % BUFFER_SIZE;
+        sem_post(&sem_critical); //Fin de l'accès exclusif
+        sem_post(&sem_busy); //Libérer un thread consommateur
     }
 
     for(int i = 0; i < N_THREADS_2; i++){
@@ -92,14 +96,4 @@ int main() {
 }
 
 
-// La situation d'interbloquage est ici crée par l'attente par le thread principale de la fin des threads consommateurs, qui sont eux-mêmes en attente  sur le sémaphore sem_busy.
-// L'exclusion mutuelle est assurée par le sémaphore sem_critical et par la séparation du thread principal et des threads consommateurs.
-// Ici nous avons deux ressources à considérer : les threads consommateurs et le sémaphore sem_busy.
-// Pour la détention et attente, le thread principal demande la ressource "fin des threads consommateurs" (ligne 84).
-// Pour la détention et attente, les threads consommateurs se détiennent eux-mêmes et demandent la ressource "libération du sémaphore sem_busy" (ligne 38).
-// Pour la non-réquisition, seul les threads consommateurs peuvent libérer la ressource associée à eux-mêmes vis-à-vis du thread principal.
-// Pour la non-réquisition, aucun thread ne peut libérer le sémaphore sem_busy (ce devrait être fait par le thread principal).
-// Attente circulaire : Le thread principal attend la libération des threads consommateurs qui attendent la libération du sémaphore sem_busy (qui devrait être faite par le thread principal). (ligne 84 et 38)
-
-
-// On est ici dans une situation d'interbloquage entre producteurs et consommateurs
+// Ici la correction consiste à s'assurer que le thread principal accède correctement au buffer de production et signale aux threads consommateurs qu'une nouvelle entrée est disponible.
